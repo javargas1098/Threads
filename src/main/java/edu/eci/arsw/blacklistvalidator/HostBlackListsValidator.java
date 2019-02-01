@@ -34,45 +34,52 @@ public class HostBlackListsValidator {
 	 * @param ipaddress suspicious host's IP address.
 	 * @return Blacklists numbers where the given host's IP address was found.
 	 */
-	public List<Integer> checkHost(String ipaddress, int thread) {
+	public List<Integer> checkHost(String ipaddress, int n) {
 
 		LinkedList<Integer> blackListOcurrences = new LinkedList<>();
 		LinkedList<Threads> hilos = new LinkedList<Threads>();
 
+		int ocurrencesCount = 0;
+		int nSection = 1;
+
 		HostBlacklistsDataSourceFacade skds = HostBlacklistsDataSourceFacade.getInstance();
 
-		int listPerThread = skds.getRegisteredServersCount() / thread;
-		int diferencia = skds.getRegisteredServersCount() - (listPerThread * thread);
-		boolean flag = (diferencia != 0) ? true : false;
+		int listPerThread = skds.getRegisteredServersCount() / n;
+		int m = skds.getRegisteredServersCount() - (listPerThread * n);
+		boolean flag = (m != 0) ? true : false;
 
 		// Fragmento de codigo hecho por Javier Vargas y Sebastian Goenaga
 
-		if (diferencia != 0) {
+		if (m != 0) {
 			flag = true;
 		}
 
-		Threads hilo;
+		Threads hilo = null;
 
-		for (int i = 0; i < thread; i++) {
+		for (int i = 0; i < n; i++) {
 			hilo = new Threads(i * listPerThread, (i + 1) * listPerThread, ipaddress, skds);
 			hilo.start();
+//			hilos.add(new Threads(i * listPerThread, i + 1 * listPerThread, ipaddress, skds));
 		}
+		
+		try {
+			hilo.join();
+		} catch (InterruptedException e) {
+			System.out.println("hola");
+			e.printStackTrace();
+		}
+		
 		if (flag) {
-			hilo = new Threads(listPerThread * thread, listPerThread * thread + diferencia, ipaddress, skds);
+			hilo = new Threads(listPerThread * n, listPerThread * n + m, ipaddress, skds);
 			hilo.start();
-
 		}
-
-		while (Threads.flag) {
-			System.out.println(Threads.flag);
-			
+		
+		try {
+			hilo.join();
+		} catch (InterruptedException e) {
+			System.out.println("hola");
+			e.printStackTrace();
 		}
-		// for (int i = 0; i < listPerThread; i++) {
-		// System.out.println(Threads.flag);
-		// }
-		//
-
-
 
 		if (Threads.count >= BLACK_LIST_ALARM_COUNT) {
 			skds.reportAsNotTrustworthy(ipaddress);
