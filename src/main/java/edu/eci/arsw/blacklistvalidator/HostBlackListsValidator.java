@@ -66,7 +66,7 @@ public class HostBlackListsValidator {
 		try {
 			hilo.join();
 		} catch (InterruptedException e) {
-			System.out.println("hola");
+			
 			e.printStackTrace();
 		}
 
@@ -78,7 +78,7 @@ public class HostBlackListsValidator {
 		try {
 			hilo.join();
 		} catch (InterruptedException e) {
-			System.out.println("hola");
+			
 			e.printStackTrace();
 		}
 

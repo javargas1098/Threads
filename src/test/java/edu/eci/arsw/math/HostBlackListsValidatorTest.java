@@ -53,11 +53,11 @@ public class HostBlackListsValidatorTest {
 			}
 			Collections.sort(Threads.blackListOcurrences);
 			String expected = Threads.blackListOcurrences.toString();
-			Threads.resetStatics();
+			Threads.reset();
 			HostBlackListsValidator validator = new HostBlackListsValidator();
 			String result = validator.checkHost(ips[i], nHilos[i]).toString();
 			assertEquals(expected, result);
-			Threads.resetStatics();
+			Threads.reset();
 		}
 
 	}

@@ -46,7 +46,7 @@ public class Threads extends Thread {
 
 	}
 
-	public static void resetStatics() {
+	public static void reset() {
 		// TODO Auto-generated method stub
 		count = 0;
 		checkedListsCount = 0;
