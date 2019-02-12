@@ -43,6 +43,9 @@ public class Threads extends Thread {
 
 			flag = false;
 		}
+		synchronized (Threads.checkedListsCount) {
+			Threads.checkedListsCount += this.personal;
+		}
 
 	}
 
