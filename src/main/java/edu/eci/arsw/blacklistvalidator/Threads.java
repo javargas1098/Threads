@@ -17,6 +17,7 @@ public class Threads extends Thread {
 	private int n2;
 	private String ipaddress;
 	private HostBlacklistsDataSourceFacade skds;
+	private int numhilos;
 
 	public Threads(int n1, int n2, String ipaddress, HostBlacklistsDataSourceFacade skds) {
 		this.n1 = n1;
@@ -28,12 +29,14 @@ public class Threads extends Thread {
 
 	@Override
 	synchronized public void run() {
+		numhilos = 0;
 		for (int i = n1; i < n2 && count < BLACK_LIST_ALARM_COUNT; i++) {
-
-			checkedListsCount++;
+			numhilos++;
+			// checkedListsCount++;
 			if (skds.isInBlackListServer(i, ipaddress)) {
 
 				count++;
+
 				blackListOcurrences.add(i);
 
 			}
@@ -43,8 +46,8 @@ public class Threads extends Thread {
 
 			flag = false;
 		}
-		synchronized (Threads.checkedListsCount) {
-			Threads.checkedListsCount += this.personal;
+		synchronized (checkedListsCount) {
+			checkedListsCount += this.numhilos;
 		}
 
 	}
